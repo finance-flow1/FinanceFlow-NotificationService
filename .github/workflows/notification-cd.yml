@@ -1,23 +1,23 @@
 name: Notification_CD
 
 on:
-workflow_run:
-workflows:
-- Notification_CI
-types:
-- completed
-branches:
-- main
-- dev
+  workflow_run:
+    workflows:
+      - Notification_CI
+    types:
+      - completed
+    branches:
+      - main
+      - dev
 
 jobs:
-cd:
-if: ${{ github.event.workflow_run.conclusion == 'success' }}
-uses: finance-flow1/CI-CD-Templates/.github/workflows/common-cd.yml@main
-with:
-service-name: financeflow-notificationservice
-ci-workflow-name: Notification_CI
-secrets:
-APP_ID: ${{ secrets.APP_ID }}
-APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-MANIFEST_REPO: ${{ secrets.MANIFEST_REPO }}
+  cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    uses: finance-flow1/CI-CD-Templates/.github/workflows/common-cd.yml@main
+    with:
+      service-name: financeflow-notificationservice
+      ci-workflow-name: Notification_CI
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+      MANIFEST_REPO: ${{ secrets.MANIFEST_REPO }}

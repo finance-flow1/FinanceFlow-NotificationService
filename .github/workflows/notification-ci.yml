@@ -1,41 +1,41 @@
 name: Notification_CI
 
 on:
-push:
-branches:
-- main
-- dev
-paths:
-- '**'
-- '.github/workflows/notification-ci.yml'
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - "**"
+      - ".github/workflows/notification-ci.yml"
 
-pull_request:
-branches:
-- main
-- dev
-paths:
-- '**'
-- '.github/workflows/notification-ci.yml'
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - "**"
+      - ".github/workflows/notification-ci.yml"
 
 jobs:
-ci:
-uses: finance-flow1/CI-CD-Templates/.github/workflows/common-ci.yml@main
-with:
-working_directory: .
-image_name: financeflow-notificationservice
-run_build: true
-docker_context: .
-dockerfile_path: Dockerfile
-service-name: financeflow-notificationservice
-sonar_project_key: FinanceFlow-Notificationservice
-secrets:
-SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-SMTP_HOST: ${{ secrets.SMTP_HOST }}
-SMTP_PORT: ${{ secrets.SMTP_PORT }}
-SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-EMAIL_TO: ${{ secrets.EMAIL_TO }}
+  ci:
+    uses: finance-flow1/CI-CD-Templates/.github/workflows/common-ci.yml@main
+    with:
+      working_directory: .
+      image_name: financeflow-notificationservice
+      run_build: true
+      docker_context: .
+      dockerfile_path: Dockerfile
+      service-name: financeflow-notificationservice
+      sonar_project_key: FinanceFlow-NotificationService
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      EMAIL_TO: ${{ secrets.EMAIL_TO }}
