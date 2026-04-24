@@ -23,7 +23,7 @@ jobs:
     with:
       working_directory: .
       image_name: financeflow-notificationservice
-      run_build: true
+      run_build: false
       docker_context: .
       dockerfile_path: Dockerfile
       service-name: financeflow-notificationservice
