@@ -17,6 +17,10 @@ on:
       - "**"
       - ".github/workflows/notification-ci.yml"
 
+permissions:
+  contents: write
+  packages: read
+
 jobs:
   ci:
     uses: finance-flow1/CI-CD-Templates/.github/workflows/common-ci.yml@main
