@@ -17,17 +17,21 @@ on:
       - "**"
       - ".github/workflows/notification-ci.yml"
 
+permissions:
+  contents: write
+  packages: read
+
 jobs:
   ci:
     uses: finance-flow1/CI-CD-Templates/.github/workflows/common-ci.yml@main
     with:
       working_directory: .
       image_name: financeflow-notificationservice
-      run_build: true
+      run_build: false
       docker_context: .
       dockerfile_path: Dockerfile
       service-name: financeflow-notificationservice
-      sonar_project_key: FinanceFlow-NotificationService
+      sonar_project_key: FinanceFlow-Notificationservice
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
