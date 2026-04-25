@@ -16,6 +16,7 @@ jobs:
     uses: finance-flow1/CI-CD-Templates/.github/workflows/common-cd.yml@main
     with:
       service-name: financeflow-notificationservice
+      helm-chart-key: notification-service
       ci-workflow-name: Notification_CI
     secrets:
       APP_ID: ${{ secrets.APP_ID }}
