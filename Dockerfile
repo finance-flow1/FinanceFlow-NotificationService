@@ -1,30 +1,24 @@
-# ── Stage 1: Dependency installation ───────────────────────────────────────
-# Isolated layer — npm cache and dev tooling never reach the final image.
-FROM node:20-alpine AS deps
+# ── Stage 1: Build ─────────────────────────────────────────────────────────
+FROM node:20-alpine AS builder
 
-WORKDIR /app
+WORKDIR /usr/src/app
+
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
-# ── Stage 2: Runtime ────────────────────────────────────────────────────────
-# Lean production image — runs as non-root node user (uid 1000).
+COPY . .
+RUN npm run build
+
+# ── Stage 2: Production ─────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
 
-# Install wget for health probes and strip npm/npx tooling
-RUN apk add --no-cache wget && \
-    rm -rf /usr/local/lib/node_modules/npm \
-           /usr/local/bin/npm \
-           /usr/local/bin/npx
+WORKDIR /usr/src/app
 
-WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
 
-# Copy with explicit ownership so the node user can read all files
-COPY --from=deps --chown=node:node /app/node_modules ./node_modules
-COPY --chown=node:node src/ ./src/
-COPY --chown=node:node package.json ./
+COPY --from=builder /usr/src/app/dist ./dist
 
-EXPOSE 5003
+EXPOSE 3000
 
-USER node
-
-CMD ["node", "src/index.js"]
+CMD ["npm", "run", "start:prod"]
