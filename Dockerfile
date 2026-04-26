@@ -1,24 +1,24 @@
-# ── Stage 1: Build ─────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+# ── Stage 1: Dependency installation ───────────────────────────────────────
+FROM node:20-alpine AS deps
 
-WORKDIR /usr/src/app
-
+WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --omit=dev
 
-COPY . .
-RUN npm run build
-
-# ── Stage 2: Production ─────────────────────────────────────────────────────
+# ── Stage 2: Runtime ────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
 
-WORKDIR /usr/src/app
+RUN apk add --no-cache wget && \
+    rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/bin/npm \
+           /usr/local/bin/npx
 
-COPY package*.json ./
-RUN npm ci --only=production
+WORKDIR /app
 
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=deps /app/node_modules ./node_modules
+COPY src/ ./src/
+COPY package.json ./
 
-EXPOSE 3000
+EXPOSE 5003
 
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "src/index.js"]
